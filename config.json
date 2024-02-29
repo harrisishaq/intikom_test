@@ -1,12 +1,17 @@
 {
-  "web": {
-    "port": "8080"
+  "auth0": {
+    "clientId": "xtidSkJH1eUM1nJu2KTZxfwpYi1QTT2m",
+    "clientSecret": "2EJBwpalb-7sXFiWgDvEutFbOmTBkP80AIX-C_A_mku6rmPX9BCZuDvFtCnmyBzA",
+    "domain":"dev-6bt3du4g81sodmqe.us.auth0.com"
   },
   "database": {
-    "username": "root",
-    "password": "",
     "host": "localhost",
+    "name": "db_intikom",
+    "password": "",
     "port": "3306",
-    "name": "db_intikom"
+    "username": "root"
+  },
+  "web": {
+    "port": "8080"
   }
 }

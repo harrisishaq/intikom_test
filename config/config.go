@@ -23,6 +23,7 @@ func Bootstrap(config *BootstrapConfig) {
 	// migrate database
 	migrate := gormigrate.New(config.DB, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
+			ID: "INIT_MIGRATION",
 			Migrate: func(tx *gorm.DB) error {
 				return tx.AutoMigrate(
 					&entity.User{},

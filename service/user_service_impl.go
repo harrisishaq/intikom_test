@@ -3,6 +3,7 @@ package service
 import (
 	"crypto/sha512"
 	"encoding/base64"
+	"fmt"
 	"intikom_test/entity"
 	"intikom_test/model"
 	"intikom_test/repository"
@@ -129,7 +130,7 @@ func (svc *userService) UpdateUser(req *model.UpdateUserRequest) error {
 	if err != nil {
 		log.Println("Error while check email, cause: ", err)
 		return model.NewError("500", "Internal server error.")
-	} else if emailExist != nil {
+	} else if emailExist != nil && fmt.Sprintf("%d", emailExist.ID) != req.ID {
 		return model.NewError("400", "Email already exist.")
 	}
 

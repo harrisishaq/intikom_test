@@ -43,6 +43,14 @@ func (repo *taskRepository) Delete(model *entity.Task) error {
 	return nil
 }
 
+func (repo *taskRepository) DeleteAllByUserID(userID string) error {
+	qResult := repo.DB.Where("user_id = ?", userID).Delete(&entity.Task{})
+	if qResult.Error != nil {
+		return qResult.Error
+	}
+	return nil
+}
+
 func (repo *taskRepository) Get(id string) (*entity.Task, error) {
 	var result entity.Task
 	qResult := repo.DB.First(&result, "id = ?", id)

@@ -1,14 +1,14 @@
 package service
 
 import (
-	"crypto/sha512"
-	"encoding/base64"
 	"fmt"
 	"intikom_test/entity"
 	"intikom_test/model"
 	"intikom_test/repository"
 	"log"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type userService struct {
@@ -28,17 +28,18 @@ func (svc *userService) CreateUser(req *model.CreateUserRequest) error {
 		return model.NewError("400", "Email already exist.")
 	}
 
-	var password = base64.StdEncoding.EncodeToString([]byte(req.Password))
-	var hash = sha512.New()
-	hash.Write([]byte(password))
-	var hashPassword = hash.Sum(nil)
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		fmt.Println("Error encrypting password:", err)
+		return model.NewError("500", "Internal server error.")
+	}
 
 	timeNow := time.Now()
 
 	var newData = &entity.User{
 		Name:      req.Name,
 		Email:     req.Email,
-		Password:  string(hashPassword),
+		Password:  fmt.Sprintf("%x", hashPassword),
 		CreatedAt: &timeNow,
 	}
 
@@ -136,16 +137,17 @@ func (svc *userService) UpdateUser(req *model.UpdateUserRequest) error {
 
 	timeNow := time.Now()
 
-	var password = base64.StdEncoding.EncodeToString([]byte(req.Password))
-	var hash = sha512.New()
-	hash.Write([]byte(password))
-	var hashPassword = hash.Sum(nil)
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		fmt.Println("Error encrypting password:", err)
+		return model.NewError("500", "Internal server error.")
+	}
 
 	var newData = &entity.User{
 		ID:        dataExist.ID,
 		Name:      req.Name,
 		Email:     req.Email,
-		Password:  string(hashPassword),
+		Password:  fmt.Sprintf("%x", hashPassword),
 		CreatedAt: dataExist.CreatedAt,
 		UpdatedAt: &timeNow,
 	}

@@ -29,12 +29,10 @@ func Bootstrap(config *BootstrapConfig) {
 	// setup controller
 	usersController := controller.NewUserController(usersService)
 
-	usersController.InitRoute(config.App)
-
 	// migrate database
 	migrate := gormigrate.New(config.DB, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
-			ID: "INIT_MIGRATION",
+			ID: "2",
 			Migrate: func(tx *gorm.DB) error {
 				return tx.AutoMigrate(
 					&entity.User{},
@@ -49,5 +47,9 @@ func Bootstrap(config *BootstrapConfig) {
 
 	if err := migrate.Migrate(); err != nil {
 		log.Fatalf("Migrate failed: %+v\n", err)
+	} else {
+		log.Println("Success Migration")
 	}
+
+	usersController.InitRoute(config.App)
 }

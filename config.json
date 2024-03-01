@@ -12,6 +12,6 @@
     "username": "root"
   },
   "web": {
-    "port": "8080"
+    "port": "3003"
   }
 }

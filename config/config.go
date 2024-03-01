@@ -1,7 +1,10 @@
 package config
 
 import (
+	"intikom_test/controller"
 	"intikom_test/entity"
+	"intikom_test/repository"
+	"intikom_test/service"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -18,8 +21,16 @@ type BootstrapConfig struct {
 
 func Bootstrap(config *BootstrapConfig) {
 	// setup repositories
+	usersRepo := repository.NewUserRepository(config.DB)
+
 	// setup services
+	usersService := service.NewUserService(usersRepo)
+
 	// setup controller
+	usersController := controller.NewUserController(usersService)
+
+	usersController.InitRoute(config.App)
+
 	// migrate database
 	migrate := gormigrate.New(config.DB, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{

@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"intikom_test/config"
+	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 )
 
 func main() {
@@ -19,7 +19,8 @@ func main() {
 		Config: viperConfig,
 	})
 
-	webPort := viper.GetString("web.port")
+	webPort := viperConfig.GetString("web.port")
+	log.Println(webPort)
 
 	ginInit.Run(fmt.Sprintf(":%s", webPort))
 }
